@@ -1,0 +1,19 @@
+title: Иван Иванов - Разработчик 1С
+description: Ведущий разработчик 1С с опытом в автоматизации бизнес-процессов
+baseurl: ""
+url: ""
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag
+  - jekyll-feed
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .git
+  - .gitignore

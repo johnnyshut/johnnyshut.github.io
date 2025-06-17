@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+    {% seo %}
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ '/' | relative_url }}">Главная</a>
+            <a href="{{ '/about' | relative_url }}">Обо мне</a>
+            <a href="{{ '/projects' | relative_url }}">Проекты</a>
+            <a href="{{ '/contact' | relative_url }}">Контакты</a>
+        </nav>
+    </header>
+
+    <main>
+        {{ content }}
+    </main>
+
+    <footer>
+        <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}. Все права защищены.</p>
+    </footer>
+</body>
+</html> 
