@@ -5,9 +5,9 @@ title: Главная
 
 <div class="hero">
     <div class="hero-content">
-        <h1>Иван Иванов</h1>
-        <h2>Ведущий разработчик 1С</h2>
-        <p class="hero-description">Эксперт в области разработки и автоматизации на платформе 1С</p>
+        <h1>Карло Иван</h1>
+        <h2>Developer, DevOps-engineer, System Analyst, Software Architect, Solution Architect</h2>
+        <p class="hero-description">Эксперт в области информационных технологий, разработки, автоматизации и цифровой трансформации бизнеса на платформе 1С</p>
     </div>
 </div>
 
@@ -35,14 +35,29 @@ title: Главная
     <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 </section>
 
-### Мои проекты
+<section class="projects">
+    <h2>Мои проекты</h2>
+    <div class="projects-grid">
+        <div class="project-card">
+            <h3>Проект 1</h3>
+            <p>Краткое описание проекта 1</p>
+        </div>
+        <div class="project-card">
+            <h3>Проект 2</h3>
+            <p>Краткое описание проекта 2</p>
+        </div>
+        <div class="project-card">
+            <h3>Проект 3</h3>
+            <p>Краткое описание проекта 3</p>
+        </div>
+    </div>
+</section>
 
-- Проект 1
-- Проект 2
-- Проект 3
-
-### Контакты
-
-- Email: [ваш email]
-- GitHub: [ваш GitHub]
-- LinkedIn: [ваш LinkedIn]
+<section class="contacts">
+    <h2>Контакты</h2>
+    <ul class="contacts-list">
+        <li><strong>Email:</strong> [ваш email]</li>
+        <li><strong>GitHub:</strong> [ваш GitHub]</li>
+        <li><strong>LinkedIn:</strong> [ваш LinkedIn]</li>
+    </ul>
+</section>
