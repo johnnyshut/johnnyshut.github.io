@@ -4,10 +4,13 @@ title: Главная
 ---
 
 <div class="hero">
-    <div class="hero-content">
-        <h1>Карло Иван</h1>
-        <h2>Developer, DevOps-engineer, System Analyst, Software Architect, Solution Architect</h2>
-        <p class="hero-description">Эксперт в области информационных технологий, разработки, автоматизации и цифровой трансформации бизнеса на платформе 1С</p>
+    <div style="display: flex; align-items: center;">
+        <img src="/assets/images/1.jpg" alt="Моё фото" style="width: 200px; border-radius: 10px; margin-right: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+        <div class="hero-content">
+            <h1>Карло Иван</h1>
+            <h2>Developer, DevOps-engineer, System Analyst, Software Architect, Solution Architect</h2>
+            <p class="hero-description">Эксперт в области информационных технологий, разработки, автоматизации и цифровой трансформации бизнеса на платформе 1С</p>
+        </div>
     </div>
 </div>
 
@@ -55,9 +58,12 @@ title: Главная
 
 <section class="contacts">
     <h2>Контакты</h2>
-    <ul class="contacts-list">
-        <li><strong>Email:</strong> [ваш email]</li>
-        <li><strong>GitHub:</strong> [ваш GitHub]</li>
-        <li><strong>LinkedIn:</strong> [ваш LinkedIn]</li>
-    </ul>
+    <div class="contacts-buttons">
+        <a class="contact-btn contact-btn-black" href="https://github.com/johnnyshut" target="_blank">GitHub</a>
+        <a class="contact-btn contact-btn-lavender" href="https://infostart.ru/profile/534321/" target="_blank">Infostart профиль</a>
+        <a class="contact-btn contact-btn-blue" href="https://t.me/ivcarlo" target="_blank">Telegram</a>
+        <a class="contact-btn contact-btn-green" href="https://wa.me/79261568903" target="_blank">WhatsApp</a>
+        <a class="contact-btn contact-btn-lightblue" href="mailto:i.karlo@outlook.com">Email</a>
+        <a class="contact-btn contact-btn-black-blue" href="tel:+79261568903">Телефон</a>
+    </div>
 </section>

@@ -116,6 +116,110 @@ section {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.contacts {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.contacts-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    margin-top: 24px;
+}
+
+.contact-btn {
+    display: block;
+    width: 420px;
+    max-width: 90vw;
+    padding: 18px 0;
+    background: #fff;
+    color: #222;
+    border-radius: 32px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.contact-btn:hover {
+    background: #f0f0f0;
+    color: #0077ff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+}
+
+.contact-btn-blue {
+    background: #0094e9;
+    color: #fff;
+}
+
+.contact-btn-blue:hover {
+    background: #0077b6;
+    color: #fff;
+}
+
+.contact-btn-green {
+    background: #25d366;
+    color: #fff;
+}
+
+.contact-btn-green:hover {
+    background: #1da851;
+    color: #fff;
+}
+
+.contact-btn-black {
+    background: #181717;
+    color: #fff;
+}
+
+.contact-btn-black:hover {
+    background: #000;
+    color: #fff;
+}
+
+.contact-btn-lavender {
+    background: #14213d;
+    color: #fff;
+}
+
+.contact-btn-lavender:hover {
+    background: #0d1730;
+    color: #fff;
+}
+
+.contact-btn-black-blue {
+    background: linear-gradient(90deg, #181717 0%, #0094e9 100%);
+    color: #fff;
+}
+
+.contact-btn-black-blue:hover {
+    background: linear-gradient(90deg, #000 0%, #0077b6 100%);
+    color: #fff;
+}
+
+.contact-btn-grey {
+    background: #6c757d;
+    color: #fff;
+}
+
+.contact-btn-grey:hover {
+    background: #495057;
+    color: #fff;
+}
+
+.contact-btn-lightblue {
+    background: #3399cc;
+    color: #fff;
+}
+
+.contact-btn-lightblue:hover {
+    background: #2176a5;
+    color: #fff;
+}
+
 h2 {
     color: var(--primary-color);
     margin-bottom: 2rem;
@@ -143,5 +247,14 @@ footer {
         flex-direction: column;
         align-items: center;
         gap: 1rem;
+    }
+    .hero > div {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    .hero img {
+        margin: 0 0 18px 0 !important;
+        width: 60vw !important;
+        max-width: 220px;
     }
 } 
