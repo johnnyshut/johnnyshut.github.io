@@ -1,0 +1,51 @@
+# Site settings
+title: Карло Иван. Архитектор бизнес-систем
+description: Solution Architect, Team Lead. Эксперт в области разработки, автоматизации и цифровой трансформации бизнеса. Опыт работы более 15 лет.
+baseurl: ""
+url: "https://johnnyshut.github.io"
+
+# Author settings
+author:
+  name: Карло Иван
+  email: i.karlo@outlook.com
+  github: johnnyshut
+  telegram: ivcarlo
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-feed
+
+# Collections
+collections:
+  projects:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .git
+  - .gitignore
+  - README.md
+  - LICENSE
