@@ -1,0 +1,148 @@
+<div class="contact-form-container animate-scale">
+    <div class="form-header">
+        <h3>Связаться со мной</h3>
+        <p class="form-subtitle">Заполните форму ниже, и я свяжусь с вами в течение 24 часов</p>
+    </div>
+    
+    <form class="contact-form" id="contactForm" onsubmit="return handleFormSubmit(event)">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">Имя *</label>
+                <input type="text" id="name" name="name" required placeholder="Ваше имя">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="subject">Тема сообщения</label>
+            <input type="text" id="subject" name="subject" placeholder="Кратко опишите тему">
+        </div>
+        
+        <div class="form-group">
+            <label for="message">Сообщение *</label>
+            <textarea id="message" name="message" rows="4" required placeholder="Расскажите о вашем проекте или задаче..."></textarea>
+        </div>
+        
+                <div class="form-actions">
+                    <button type="submit" class="form-submit">
+                        <span class="submit-text">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                            </svg>
+                            Отправить сообщение
+                        </span>
+                        <span class="submit-loading" style="display: none;">
+                            <svg class="loading-spinner" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2a10 10 0 0 1 10 10h-2a8 8 0 0 0-8-8V2z"/>
+                            </svg>
+                            Отправка...
+                        </span>
+                    </button>
+                </div>
+    </form>
+    
+    <div class="form-success" id="formSuccess" style="display: none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        <p>Спасибо! Ваше сообщение успешно отправлено. Я свяжусь с вами в ближайшее время.</p>
+    </div>
+    
+            <div class="form-error" id="formError" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <p>Не удалось отправить сообщение. Свяжитесь со мной напрямую через контакты выше.</p>
+            </div>
+</div>
+
+<script>
+async function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const subject = formData.get('subject');
+    const message = formData.get('message');
+    
+    // Validate required fields
+    if (!name || !email || !message) {
+        showError('Пожалуйста, заполните все обязательные поля');
+        return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showError('Пожалуйста, введите корректный email адрес');
+        return;
+    }
+    
+    try {
+        // Show loading state
+        showLoading();
+        
+        // Use the GitHub Issue function
+        const result = await createGitHubIssue(name, email, subject, message);
+        
+        if (result.success) {
+            showSuccess();
+            form.reset();
+        } else {
+            showError('Произошла ошибка при отправке сообщения');
+        }
+    } catch (error) {
+        console.error('Form submission error:', error);
+        showError('Произошла ошибка при отправке сообщения');
+    }
+}
+
+function showLoading() {
+    const submitButton = document.querySelector('.form-submit');
+    const submitText = submitButton.querySelector('.submit-text');
+    const submitLoading = submitButton.querySelector('.submit-loading');
+    
+    submitText.style.display = 'none';
+    submitLoading.style.display = 'flex';
+    submitButton.disabled = true;
+    
+    // Hide any previous messages
+    document.getElementById('formSuccess').style.display = 'none';
+    document.getElementById('formError').style.display = 'none';
+}
+
+function showSuccess() {
+    const submitButton = document.querySelector('.form-submit');
+    const submitText = submitButton.querySelector('.submit-text');
+    const submitLoading = submitButton.querySelector('.submit-loading');
+    
+    submitText.style.display = 'flex';
+    submitLoading.style.display = 'none';
+    submitButton.disabled = false;
+    
+    document.getElementById('formSuccess').style.display = 'block';
+    document.getElementById('formError').style.display = 'none';
+}
+
+function showError(message) {
+    const submitButton = document.querySelector('.form-submit');
+    const submitText = submitButton.querySelector('.submit-text');
+    const submitLoading = submitButton.querySelector('.submit-loading');
+    
+    submitText.style.display = 'flex';
+    submitLoading.style.display = 'none';
+    submitButton.disabled = false;
+    
+    const errorElement = document.getElementById('formError');
+    errorElement.querySelector('p').textContent = message;
+    errorElement.style.display = 'block';
+    document.getElementById('formSuccess').style.display = 'none';
+}
+</script>
