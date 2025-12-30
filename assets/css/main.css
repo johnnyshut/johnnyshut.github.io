@@ -779,7 +779,11 @@ body {
     }
     
     .section {
-        padding: var(--spacing-12) var(--spacing-4);
+        padding: var(--spacing-12) var(--spacing-4) var(--spacing-8) var(--spacing-4);
+    }
+    
+    #contacts.section {
+        padding-bottom: var(--spacing-6);
     }
     
     .section-title {
@@ -798,10 +802,12 @@ body {
     }
     
     .contact-form-container {
-        padding: var(--spacing-4);
+        padding: var(--spacing-5);
         margin: var(--spacing-4) 0;
         max-width: 100%;
-        width: 100%;
+        width: calc(100% - var(--spacing-2));
+        margin-left: auto;
+        margin-right: auto;
         box-sizing: border-box;
     }
     
@@ -875,11 +881,16 @@ body {
     
     /* Contacts section адаптация */
     .contacts {
-        padding: var(--spacing-8);
-        margin: var(--spacing-6) 0;
+        padding: var(--spacing-6) var(--spacing-4);
+        margin: var(--spacing-6) 0 var(--spacing-4) 0;
     }
     
     /* Footer адаптация */
+    .footer {
+        margin-top: var(--spacing-8);
+        padding: var(--spacing-5) var(--spacing-4);
+    }
+    
     .footer-container {
         flex-direction: column;
         text-align: center;
@@ -937,9 +948,11 @@ body {
     }
     
     .contact-form-container {
-        padding: var(--spacing-3);
-        margin: var(--spacing-3) 0;
-        width: 100%;
+        padding: var(--spacing-5);
+        margin: var(--spacing-4) 0;
+        width: calc(100% - var(--spacing-2));
+        margin-left: auto;
+        margin-right: auto;
         box-sizing: border-box;
     }
     
@@ -967,8 +980,8 @@ body {
     }
     
     .contacts {
-        padding: var(--spacing-6);
-        margin: var(--spacing-4) 0;
+        padding: var(--spacing-5) var(--spacing-3);
+        margin: var(--spacing-4) 0 var(--spacing-2) 0;
     }
     
     .contacts-buttons {
@@ -986,7 +999,11 @@ body {
     }
     
     .section {
-        padding: var(--spacing-8) var(--spacing-3);
+        padding: var(--spacing-8) var(--spacing-3) var(--spacing-6) var(--spacing-3);
+    }
+    
+    #contacts.section {
+        padding-bottom: var(--spacing-4);
     }
     
     .section-title {
@@ -1015,6 +1032,11 @@ body {
     .tech-tag {
         font-size: var(--font-size-xs);
         padding: var(--spacing-1) var(--spacing-3);
+    }
+    
+    .footer {
+        margin-top: var(--spacing-6);
+        padding: var(--spacing-4) var(--spacing-3);
     }
 }
 
@@ -1673,7 +1695,7 @@ body {
     background: var(--color-background-alt);
     border-radius: var(--radius-xl);
     padding: var(--spacing-12);
-    margin: var(--spacing-8) 0;
+    margin: var(--spacing-8) 0 var(--spacing-6) 0;
 }
 
 .contacts-buttons {
