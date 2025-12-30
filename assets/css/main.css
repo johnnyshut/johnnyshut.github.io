@@ -81,6 +81,7 @@
 html {
     scroll-behavior: smooth;
     font-size: 16px;
+    overflow-x: hidden;
 }
 
 body {
@@ -91,6 +92,9 @@ body {
     background-color: var(--color-background);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
 }
 
 /* ===== ACCESSIBILITY ===== */
@@ -795,8 +799,10 @@ body {
     
     .contact-form-container {
         padding: var(--spacing-4);
-        margin: var(--spacing-4) var(--spacing-2);
-        max-width: none;
+        margin: var(--spacing-4) 0;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .form-row {
@@ -812,6 +818,87 @@ body {
     .form-group input,
     .form-group textarea {
         font-size: 16px; /* Предотвращает зум на iOS */
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .form-submit,
+    .resume-download-btn {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Timeline адаптация */
+    .timeline::before {
+        left: 20px;
+    }
+    
+    .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        padding-left: 50px !important;
+        padding-right: 0 !important;
+        text-align: left !important;
+    }
+    
+    .timeline-item:nth-child(odd) .timeline-marker,
+    .timeline-item:nth-child(even) .timeline-marker {
+        left: 10px;
+        right: auto;
+    }
+    
+    /* Technologies адаптация */
+    .technologies-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-6);
+    }
+    
+    /* Contacts buttons адаптация */
+    .contacts-buttons {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-3);
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .contact-btn {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+    
+    /* Contacts section адаптация */
+    .contacts {
+        padding: var(--spacing-8);
+        margin: var(--spacing-6) 0;
+    }
+    
+    /* Footer адаптация */
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-3);
+    }
+    
+    .footer-links {
+        justify-content: center;
+    }
+    
+    /* About адаптация */
+    .about {
+        padding: var(--spacing-6);
+    }
+    
+    /* Certificates адаптация */
+    .certificates-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-4);
     }
 }
 
@@ -851,7 +938,9 @@ body {
     
     .contact-form-container {
         padding: var(--spacing-3);
-        margin: var(--spacing-3) var(--spacing-1);
+        margin: var(--spacing-3) 0;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .form-header h3 {
@@ -866,12 +955,66 @@ body {
     .form-group textarea {
         padding: var(--spacing-4);
         font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .form-submit {
         width: 100%;
         padding: var(--spacing-4);
         font-size: var(--font-size-base);
+        max-width: 100%;
+    }
+    
+    .contacts {
+        padding: var(--spacing-6);
+        margin: var(--spacing-4) 0;
+    }
+    
+    .contacts-buttons {
+        gap: var(--spacing-2);
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .contact-btn {
+        padding: var(--spacing-3) var(--spacing-4);
+        font-size: var(--font-size-sm);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .section {
+        padding: var(--spacing-8) var(--spacing-3);
+    }
+    
+    .section-title {
+        font-size: var(--font-size-2xl);
+        margin-bottom: var(--spacing-6);
+    }
+    
+    .skill-card,
+    .project-card-content,
+    .about {
+        padding: var(--spacing-4);
+    }
+    
+    .timeline-content {
+        padding: var(--spacing-4);
+    }
+    
+    .tech-category {
+        padding: var(--spacing-6);
+    }
+    
+    .tech-tags {
+        gap: var(--spacing-2);
+    }
+    
+    .tech-tag {
+        font-size: var(--font-size-xs);
+        padding: var(--spacing-1) var(--spacing-3);
     }
 }
 
@@ -1342,6 +1485,7 @@ body {
     margin-right: auto;
     width: 100%;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .form-header {
@@ -1365,12 +1509,16 @@ body {
 .contact-form {
     display: grid;
     gap: var(--spacing-4);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-4);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .form-group {
@@ -1673,30 +1821,6 @@ body {
 }
 
 
-@media (max-width: 480px) {
-    .hero h1 {
-        font-size: var(--font-size-3xl);
-    }
-    
-    .hero h2 {
-        font-size: var(--font-size-lg);
-    }
-    
-    .hero-avatar {
-        width: 120px;
-        height: 120px;
-    }
-    
-    .section-title {
-        font-size: var(--font-size-2xl);
-    }
-    
-    .skill-card,
-    .project-card-content,
-    .about {
-        padding: var(--spacing-6);
-    }
-}
 
 /* ===== UTILITY CLASSES ===== */
 .text-center {
