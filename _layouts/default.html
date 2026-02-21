@@ -320,12 +320,147 @@
         });
 
 
-        // PDF Generation Function using HTML to Canvas
+        // PDF Generation Function - dynamically builds content from page DOM
         let isGeneratingPDF = false;
+        
+        function buildResumeContentFromDOM() {
+            const text = (selector, fallback = '') => {
+                const el = document.querySelector(selector);
+                return el ? el.textContent.trim() : fallback;
+            };
+            
+            const authorName = text('.hero-name') || '{{ site.author.name }}';
+            const authorPosition = text('.hero-position') || '{{ site.author.name }}';
+            
+            // Контакты из hero и секции contacts (без дубликатов)
+            const contacts = {};
+            const set = (k, v) => { if (v && !contacts[k]) contacts[k] = v; };
+            const emailEl = document.querySelector('.contact-btn-email, .hero-contact-item[href^="mailto:"]');
+            if (emailEl) set('Email', (emailEl.getAttribute('href') || '').replace('mailto:', '').trim());
+            const phoneEl = document.querySelector('.contact-btn-phone');
+            if (phoneEl) set('Телефон', phoneEl.textContent.trim());
+            const ghEl = document.querySelector('.hero-contact-item[href*="github"], a.contact-btn[href*="github.com"]');
+            if (ghEl) set('GitHub', ghEl.textContent.trim() || (ghEl.getAttribute('href') || '').replace(/\/$/, ''));
+            const tgEl = document.querySelector('.hero-contact-item[href*="t.me"], a.contact-btn[href*="t.me"]');
+            if (tgEl) set('Telegram', tgEl.textContent.trim() || '@' + (tgEl.getAttribute('href') || '').split('t.me/')[1]?.split('/')[0]);
+            const waEl = document.querySelector('a.contact-btn[href*="wa.me"]');
+            if (waEl) set('WhatsApp', waEl.getAttribute('href') || '');
+            let contactsHtml = Object.entries(contacts).map(([k, v]) => `<p style="margin: 5px 0;"><strong>${k}:</strong> ${v}</p>`).join('');
+            if (!contactsHtml) {
+                contactsHtml = `<p style="margin: 5px 0;"><strong>Email:</strong> {{ site.author.email }}</p>
+                    <p style="margin: 5px 0;"><strong>GitHub:</strong> github.com/{{ site.author.github }}</p>
+                    <p style="margin: 5px 0;"><strong>Telegram:</strong> @{{ site.author.telegram }}</p>`;
+            }
+            
+            // О себе
+            const aboutSection = document.querySelector('#about .about');
+            const aboutHtml = aboutSection ? Array.from(aboutSection.querySelectorAll('p')).map(p => `<p style="margin: 5px 0 0 0;">${p.textContent.trim()}</p>`).join('') : '';
+            
+            // Навыки
+            let skillsHtml = '';
+            document.querySelectorAll('#skills .skill-card').forEach(card => {
+                const h3 = card.querySelector('h3');
+                const p = card.querySelector('p');
+                if (h3 && p) skillsHtml += `<li><strong>${h3.textContent.trim()}:</strong> ${p.textContent.trim()}</li>`;
+            });
+            
+            // Опыт работы
+            let experienceHtml = '';
+            document.querySelectorAll('#experience .timeline-item').forEach(item => {
+                const date = item.querySelector('.timeline-date')?.textContent?.trim() || '';
+                const h3 = item.querySelector('.timeline-content h3')?.textContent?.trim() || '';
+                const h4 = item.querySelector('.timeline-content h4')?.textContent?.trim() || '';
+                const p = item.querySelector('.timeline-content > p')?.textContent?.trim() || '';
+                const techs = Array.from(item.querySelectorAll('.tech-badge')).map(t => t.textContent.trim()).join(', ');
+                experienceHtml += `
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="margin: 0; font-size: 14px; font-weight: bold;">${h3}</h3>
+                            <span style="font-size: 12px; color: #666;">${date}</span>
+                        </div>
+                        ${h4 ? `<p style="margin: 5px 0; font-size: 12px; color: #666;">${h4}</p>` : ''}
+                        ${p ? `<p style="margin: 5px 0 0 0;">${p}</p>` : ''}
+                        ${techs ? `<p style="margin: 5px 0; font-size: 11px; color: #888;">${techs}</p>` : ''}
+                    </div>`;
+            });
+            
+            // Образование
+            let educationHtml = '';
+            document.querySelectorAll('#education .timeline-item').forEach(item => {
+                const date = item.querySelector('.timeline-date')?.textContent?.trim() || '';
+                const h3 = item.querySelector('.timeline-content h3')?.textContent?.trim() || '';
+                const h4 = item.querySelector('.timeline-content h4')?.textContent?.trim() || '';
+                const p = item.querySelector('.timeline-content > p')?.textContent?.trim() || '';
+                educationHtml += `
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 14px; font-weight: bold;">${h3}</h3>
+                                ${h4 ? `<p style="margin: 5px 0; font-size: 12px; color: #666;">${h4}</p>` : ''}
+                                ${p ? `<p style="margin: 5px 0; font-size: 12px;">${p}</p>` : ''}
+                            </div>
+                            <span style="font-size: 12px; color: #666;">${date}</span>
+                        </div>
+                    </div>`;
+            });
+            
+            // Сертификаты
+            let certsHtml = '';
+            document.querySelectorAll('#certificates .certificate-card').forEach(card => {
+                const h3 = card.querySelector('h3')?.textContent?.trim() || '';
+                const org = card.querySelector('p')?.textContent?.trim() || '';
+                const date = card.querySelector('.certificate-date')?.textContent?.trim() || '';
+                const orgPart = org ? ' (' + org + ')' : '';
+                const datePart = date ? ' — ' + date : '';
+                if (h3) certsHtml += '<li>' + h3 + orgPart + datePart + '</li>';
+            });
+            
+            // Технологии
+            let techHtml = '';
+            document.querySelectorAll('#technologies .tech-category').forEach(cat => {
+                const title = cat.querySelector('h3')?.textContent?.trim() || '';
+                const tags = Array.from(cat.querySelectorAll('.tech-tag')).map(t => t.textContent.trim()).join(', ');
+                if (title && tags) techHtml += `<p style="margin: 5px 0;"><strong>${title}:</strong> ${tags}</p>`;
+            });
+            
+            // Проекты
+            let projectsHtml = '';
+            document.querySelectorAll('#projects .project-card').forEach(card => {
+                const h3 = card.querySelector('h3')?.textContent?.trim() || '';
+                const p = card.querySelector('.project-card-content > p')?.textContent?.trim() || '';
+                const links = Array.from(card.querySelectorAll('.project-link')).map(a => a.getAttribute('href')).filter(Boolean);
+                const pPart = p ? ': ' + p : '';
+                const linksPart = links.length ? ' [' + links.join(', ') + ']' : '';
+                if (h3) projectsHtml += '<li><strong>' + h3 + '</strong>' + pPart + linksPart + '</li>';
+            });
+            
+            const block = (title, content) => content ? `
+                <div style="margin-bottom: 20px;">
+                    <h2 style="color: #1a1a1a; font-size: 14px; margin: 0 0 10px 0; text-transform: uppercase;">${title}</h2>
+                    ${content}
+                </div>` : '';
+            
+            return `
+                <div style="background: #1a1a1a; color: white; padding: 20px; margin: -20px -20px 20px -20px;">
+                    <h1 style="margin: 0; font-size: 24px; font-weight: bold;">${authorName}</h1>
+                    <p style="margin: 5px 0 0 0; font-size: 14px;">${authorPosition.replaceAll(/<br\s*\/?>/gi, ', ')}</p>
+                </div>
+                ${block('КОНТАКТНАЯ ИНФОРМАЦИЯ', contactsHtml)}
+                ${aboutHtml ? block('О СЕБЕ', aboutHtml) : ''}
+                ${skillsHtml ? block('ТЕХНИЧЕСКИЕ НАВЫКИ', `<ul style="margin: 0; padding-left: 20px;">${skillsHtml}</ul>`) : ''}
+                ${experienceHtml ? block('ОПЫТ РАБОТЫ', experienceHtml) : ''}
+                ${educationHtml ? block('ОБРАЗОВАНИЕ', educationHtml) : ''}
+                ${certsHtml ? block('СЕРТИФИКАТЫ', `<ul style="margin: 0; padding-left: 20px;">${certsHtml}</ul>`) : ''}
+                ${techHtml ? block('ТЕХНОЛОГИИ', techHtml) : ''}
+                ${projectsHtml ? block('ПРОЕКТЫ', `<ul style="margin: 0; padding-left: 20px;">${projectsHtml}</ul>`) : ''}
+                <div style="background: #f8f9fa; padding: 10px; margin: 20px -20px -20px -20px; text-align: center; font-size: 10px; color: #666;">
+                    Резюме сгенерировано автоматически с сайта
+                </div>`;
+        }
+        
         async function generateResumePDF() {
             if (isGeneratingPDF) return;
             isGeneratingPDF = true;
-            // Create a temporary div with resume content
             const resumeDiv = document.createElement('div');
             resumeDiv.style.cssText = `
                 position: fixed;
@@ -339,85 +474,7 @@
                 line-height: 1.4;
                 color: #333;
             `;
-            
-            resumeDiv.innerHTML = `
-                <div style="background: #1a1a1a; color: white; padding: 20px; margin: -20px -20px 20px -20px;">
-                    <h1 style="margin: 0; font-size: 24px; font-weight: bold;">Карло Иван</h1>
-                    <p style="margin: 5px 0 0 0; font-size: 14px;">Full Stack Developer / DevOps Engineer</p>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <h2 style="color: #1a1a1a; font-size: 14px; margin: 0 0 10px 0; text-transform: uppercase;">КОНТАКТНАЯ ИНФОРМАЦИЯ</h2>
-                    <p style="margin: 5px 0;"><strong>Email:</strong> i.karlo@outlook.com</p>
-                    <p style="margin: 5px 0;"><strong>Телефон:</strong> +7 (926) 156-89-03</p>
-                    <p style="margin: 5px 0;"><strong>GitHub:</strong> github.com/johnnyshut</p>
-                    <p style="margin: 5px 0;"><strong>Telegram:</strong> @ivcarlo</p>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <h2 style="color: #1a1a1a; font-size: 14px; margin: 0 0 10px 0; text-transform: uppercase;">О СЕБЕ</h2>
-                    <p style="margin: 0;">Опытный Full Stack разработчик с 5+ годами опыта в создании веб-приложений и автоматизации процессов. Специализируюсь на Node.js, React, Python, PHP и 1С:Предприятие. Имею опыт работы с облачными технологиями и DevOps практиками.</p>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <h2 style="color: #1a1a1a; font-size: 14px; margin: 0 0 10px 0; text-transform: uppercase;">ТЕХНИЧЕСКИЕ НАВЫКИ</h2>
-                    <ul style="margin: 0; padding-left: 20px;">
-                        <li><strong>Backend:</strong> Node.js, Python, PHP, Express.js, FastAPI, Laravel</li>
-                        <li><strong>Frontend:</strong> React, Vue.js, TypeScript, JavaScript, HTML5, CSS3</li>
-                        <li><strong>Databases:</strong> PostgreSQL, MySQL, MongoDB, Redis, Elasticsearch</li>
-                        <li><strong>DevOps:</strong> Docker, Kubernetes, AWS, Google Cloud, Azure, CI/CD</li>
-                        <li><strong>Tools:</strong> Git, Linux, Nginx, Apache, Jest, Cypress, Figma, 1С:Предприятие</li>
-                    </ul>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <h2 style="color: #1a1a1a; font-size: 14px; margin: 0 0 10px 0; text-transform: uppercase;">ОПЫТ РАБОТЫ</h2>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3 style="margin: 0; font-size: 14px; font-weight: bold;">Senior Full Stack Developer</h3>
-                            <span style="font-size: 12px; color: #666;">2022 - настоящее время</span>
-                        </div>
-                        <p style="margin: 5px 0; font-size: 12px; color: #666;">IT Solutions Company</p>
-                        <p style="margin: 5px 0 0 0;">Разработка и поддержка веб-приложений на Node.js и React. Внедрение DevOps практик, настройка CI/CD пайплайнов. Работа с микросервисной архитектурой и облачными технологиями.</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3 style="margin: 0; font-size: 14px; font-weight: bold;">Full Stack Developer</h3>
-                            <span style="font-size: 12px; color: #666;">2020 - 2022</span>
-                        </div>
-                        <p style="margin: 5px 0; font-size: 12px; color: #666;">Web Development Agency</p>
-                        <p style="margin: 5px 0 0 0;">Разработка клиентских проектов на PHP и JavaScript. Интеграция с внешними API, работа с базами данных. Создание адаптивных интерфейсов и оптимизация производительности.</p>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <h2 style="color: #1a1a1a; font-size: 14px; margin: 0 0 10px 0; text-transform: uppercase;">ОБРАЗОВАНИЕ</h2>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h3 style="margin: 0; font-size: 14px; font-weight: bold;">Бакалавр информационных технологий</h3>
-                            <p style="margin: 5px 0; font-size: 12px; color: #666;">Московский технический университет</p>
-                        </div>
-                        <span style="font-size: 12px; color: #666;">2016 - 2020</span>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <h2 style="color: #1a1a1a; font-size: 14px; margin: 0 0 10px 0; text-transform: uppercase;">СЕРТИФИКАТЫ</h2>
-                    <ul style="margin: 0; padding-left: 20px;">
-                        <li>AWS Certified Solutions Architect (2023)</li>
-                        <li>Google Cloud Professional Developer (2022)</li>
-                        <li>Docker Certified Associate (2021)</li>
-                        <li>1С:Специалист по платформе 8.3 (2020)</li>
-                    </ul>
-                </div>
-                
-                <div style="background: #f8f9fa; padding: 10px; margin: 20px -20px -20px -20px; text-align: center; font-size: 10px; color: #666;">
-                    Резюме сгенерировано автоматически с сайта
-                </div>
-            `;
-            
+            resumeDiv.innerHTML = buildResumeContentFromDOM();
             document.body.appendChild(resumeDiv);
             
             try {
@@ -450,7 +507,8 @@
                     heightLeft -= pageHeight;
                 }
                 
-                pdf.save('Карло_Иван_Resume.pdf');
+                const fileName = (document.querySelector('.hero-name')?.textContent?.trim() || '{{ site.author.name }}').replaceAll(/\s+/g, '_') + '_Resume.pdf';
+                pdf.save(fileName);
                 
             } catch (error) {
                 console.error('Error generating PDF:', error);
