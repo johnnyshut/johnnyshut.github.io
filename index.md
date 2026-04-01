@@ -133,4 +133,6 @@ title: Главная
 
 {% include projects.html %}
 
+{% include stream.html %}
+
 {% include contacts.html %}

@@ -1125,6 +1125,20 @@ body {
     margin-bottom: 0;
 }
 
+.about .stream-video-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-2) 0;
+    line-height: 1.3;
+}
+
+.about .stream-video-meta {
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+    margin-bottom: var(--spacing-6);
+}
+
 /* ===== PROJECTS SECTION ===== */
 .projects-grid {
     display: grid;
