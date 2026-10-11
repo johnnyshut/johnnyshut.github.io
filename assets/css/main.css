@@ -1129,14 +1129,170 @@ body {
     font-size: var(--font-size-xl);
     font-weight: 600;
     color: var(--color-primary);
-    margin: 0 0 var(--spacing-2) 0;
+    margin: var(--spacing-8) 0 var(--spacing-2) 0;
     line-height: 1.3;
+}
+
+.about .stream-video-title:first-of-type {
+    margin-top: 0;
+}
+
+.about p .project-link + .project-link {
+    margin-left: var(--spacing-4);
 }
 
 .about .stream-video-meta {
     font-size: var(--font-size-sm);
     opacity: 0.9;
     margin-bottom: var(--spacing-6);
+}
+
+.talks-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+    margin-top: var(--spacing-8);
+}
+
+.talk-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-6);
+    background: var(--color-background);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-6) var(--spacing-8);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.talk-card:hover,
+.talk-card.animated:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.talk-marker {
+    flex: 0 0 4.75rem;
+    text-align: center;
+}
+
+.talk-day {
+    display: block;
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-primary);
+}
+
+.talk-day-year {
+    font-size: var(--font-size-xl);
+    padding-top: 0.35rem;
+}
+
+.talk-month {
+    display: block;
+    margin-top: var(--spacing-1);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+}
+
+.talk-year {
+    display: block;
+    margin-top: 0.125rem;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+}
+
+.talk-kind {
+    display: block;
+    margin-top: var(--spacing-2);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.talk-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.talk-preview {
+    flex: 0 0 220px;
+    width: 220px;
+    height: auto;
+    align-self: flex-start;
+    border-radius: var(--radius-lg);
+    display: block;
+}
+
+.talk-body .stream-video-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-2) 0;
+    line-height: 1.3;
+}
+
+.talk-body .stream-video-meta {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-3);
+}
+
+.talk-body p {
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-4);
+}
+
+.talk-body p:last-child {
+    margin-bottom: 0;
+}
+
+.talk-links .project-link + .project-link {
+    margin-left: var(--spacing-4);
+}
+
+.talks-invite {
+    margin-top: var(--spacing-8);
+}
+
+@media (max-width: 640px) {
+    .talk-card {
+        flex-direction: column;
+        gap: var(--spacing-4);
+        padding: var(--spacing-5);
+    }
+
+    .talk-marker {
+        flex: none;
+        display: flex;
+        align-items: baseline;
+        gap: var(--spacing-2);
+        width: 100%;
+        text-align: left;
+    }
+
+    .talk-day-year {
+        padding-top: 0;
+    }
+
+    .talk-month,
+    .talk-year,
+    .talk-kind {
+        margin-top: 0;
+    }
+
+    .talk-preview {
+        flex: none;
+        width: 100%;
+        order: 3;
+    }
 }
 
 /* ===== PROJECTS SECTION ===== */
@@ -1166,10 +1322,29 @@ body {
 }
 
 .project-card h3 {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
     font-size: var(--font-size-xl);
     font-weight: 600;
     color: var(--color-primary);
     margin-bottom: var(--spacing-4);
+}
+
+.project-icon {
+    flex: 0 0 1.375rem;
+    width: 1.375rem;
+    height: 1.375rem;
+    margin-top: 0.15rem;
+    color: var(--color-accent);
+}
+
+.project-icon svg,
+.project-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .project-card p {

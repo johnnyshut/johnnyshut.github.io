@@ -316,7 +316,16 @@
             };
             
             const authorName = text('.hero-name') || '{{ site.author.name }}';
-            const authorPosition = text('.hero-position') || '{{ site.author.name }}';
+            const positionEl = document.querySelector('.hero-position');
+            const authorPosition = positionEl
+                ? positionEl.innerHTML
+                    .replaceAll(/<br\s*\/?>/gi, '\n')
+                    .replaceAll(/<[^>]+>/g, '')
+                    .split('\n')
+                    .map(line => line.trim().replace(/,\s*$/, ''))
+                    .filter(Boolean)
+                    .join(', ')
+                : '{{ site.author.name }}';
             
             // Контакты из hero и секции contacts (без дубликатов)
             const contacts = {};
@@ -329,6 +338,8 @@
             if (ghEl) set('GitHub', ghEl.textContent.trim() || (ghEl.getAttribute('href') || '').replace(/\/$/, ''));
             const tgEl = document.querySelector('.hero-contact-item[href*="t.me"], a.contact-btn[href*="t.me"]');
             if (tgEl) set('Telegram', tgEl.textContent.trim() || '@' + (tgEl.getAttribute('href') || '').split('t.me/')[1]?.split('/')[0]);
+            const infostartEl = document.querySelector('.hero-contact-item[href*="infostart.ru"]');
+            if (infostartEl) set('Инфостарт', (infostartEl.getAttribute('href') || '').replace(/\/$/, ''));
             const waEl = document.querySelector('a.contact-btn[href*="wa.me"]');
             if (waEl) set('WhatsApp', waEl.getAttribute('href') || '');
             let contactsHtml = Object.entries(contacts).map(([k, v]) => `<p style="margin: 5px 0;"><strong>${k}:</strong> ${v}</p>`).join('');
@@ -419,6 +430,35 @@
                 const linksPart = links.length ? ' [' + links.join(', ') + ']' : '';
                 if (h3) projectsHtml += '<li><strong>' + h3 + '</strong>' + pPart + linksPart + '</li>';
             });
+
+            // Выступления
+            let talksHtml = '';
+            document.querySelectorAll('#talks h3.stream-video-title').forEach(h3 => {
+                let node = h3.nextElementSibling;
+                let meta = '';
+                const descriptions = [];
+                const links = [];
+                while (node && node.tagName !== 'H3') {
+                    if (node.classList.contains('stream-video-meta')) {
+                        meta = node.textContent.trim();
+                    } else {
+                        const clone = node.cloneNode(true);
+                        clone.querySelectorAll('a').forEach(anchor => anchor.remove());
+                        if (clone.textContent.trim()) {
+                            descriptions.push(node.textContent.trim());
+                        }
+                        node.querySelectorAll('a.project-link').forEach(anchor => {
+                            const href = anchor.getAttribute('href');
+                            if (href) links.push(href);
+                        });
+                    }
+                    node = node.nextElementSibling;
+                }
+                const metaPart = meta ? ' — ' + meta : '';
+                const descPart = descriptions.length ? ' ' + descriptions.join(' ') : '';
+                const linksPart = links.length ? ' [' + links.join(', ') + ']' : '';
+                talksHtml += '<li><strong>' + h3.textContent.trim() + '</strong>' + metaPart + descPart + linksPart + '</li>';
+            });
             
             const block = (title, content) => content ? `
                 <div style="margin-bottom: 20px;">
@@ -439,6 +479,7 @@
                 ${certsHtml ? block('СЕРТИФИКАТЫ', `<ul style="margin: 0; padding-left: 20px;">${certsHtml}</ul>`) : ''}
                 ${techHtml ? block('ТЕХНОЛОГИИ', techHtml) : ''}
                 ${projectsHtml ? block('ПРОЕКТЫ', `<ul style="margin: 0; padding-left: 20px;">${projectsHtml}</ul>`) : ''}
+                ${talksHtml ? block('ВЫСТУПЛЕНИЯ', `<ul style="margin: 0; padding-left: 20px;">${talksHtml}</ul>`) : ''}
                 <div style="background: #f8f9fa; padding: 10px; margin: 20px -20px -20px -20px; text-align: center; font-size: 10px; color: #666;">
                     Резюме сгенерировано автоматически с сайта
                 </div>`;
